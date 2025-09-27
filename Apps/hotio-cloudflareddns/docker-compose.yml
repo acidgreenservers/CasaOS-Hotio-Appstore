@@ -1,0 +1,150 @@
+name: hotio-cloudflareddns
+services:
+  cloudflareddns:
+    container_name: cloudflareddns
+    image: ghcr.io/hotio/cloudflareddns:release
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - INTERVAL=300
+      - DETECTION_MODE=dig-whoami.cloudflare
+      - LOG_LEVEL=3
+      - CF_USER=your.cf.email@example.com
+      - CF_APIKEY=cfapikey-abc123def456
+      - CF_APITOKEN=cfapitoken-xyz789uvw012
+      - CF_APITOKEN_ZONE=
+      - CF_HOSTS=test.example.com;test.foobar.com;test2.foobar.com
+      - CF_ZONES=example.com;foobar.com;foobar.com
+      - CF_RECORDTYPES=A
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+        - container: UMASK
+          label:
+            en_US: "Umask"
+          description:
+            en_US: "The umask for the container."
+          default: "002"
+        - container: INTERVAL
+          label:
+            en_US: "Update Interval"
+          description:
+            en_US: "The interval in seconds between DNS updates."
+          default: "300"
+        - container: DETECTION_MODE
+          label:
+            en_US: "Detection Mode"
+          description:
+            en_US: "The method to detect the current IP address."
+          default: "dig-whoami.cloudflare"
+        - container: LOG_LEVEL
+          label:
+            en_US: "Log Level"
+          description:
+            en_US: "The logging level (1-5)."
+          default: "3"
+        - container: CF_USER
+          label:
+            en_US: "Cloudflare User"
+          description:
+            en_US: "Your Cloudflare account email."
+          default: "your.cf.email@example.com"
+        - container: CF_APIKEY
+          label:
+            en_US: "Cloudflare API Key"
+          description:
+            en_US: "Your Cloudflare Global API Key."
+          default: "your.global.apikey"
+        - container: CF_APITOKEN
+          label:
+            en_US: "Cloudflare API Token"
+          description:
+            en_US: "Your Cloudflare API Token."
+          default: ""
+        - container: CF_APITOKEN_ZONE
+          label:
+            en_US: "Cloudflare API Token Zone"
+          description:
+            en_US: "Your Cloudflare API Token for Zone."
+          default: ""
+        - container: CF_HOSTS
+          label:
+            en_US: "Cloudflare Hosts"
+          description:
+            en_US: "Semicolon-separated list of hostnames to update."
+          default: "test.example.com;test.foobar.com;test2.foobar.com"
+        - container: CF_ZONES
+          label:
+            en_US: "Cloudflare Zones"
+          description:
+            en_US: "Semicolon-separated list of zones corresponding to hosts."
+          default: "example.com;foobar.com;foobar.com"
+        - container: CF_RECORDTYPES
+          label:
+            en_US: "Cloudflare Record Types"
+          description:
+            en_US: "Semicolon-separated list of record types (A, AAAA, etc.)."
+          default: "A;A;AAAA"
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Cloudflare Dynamic DNS updater configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: cloudflareddns
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Automatic Cloudflare DNS updates"
+  description:
+    en_US: |
+      ☁️ Cloudflare DDNS automatically updates your DNS records on Cloudflare whenever your IP address changes.
+
+      It supports multiple hosts, zones, and record types, ensuring your dynamic IP is always reflected in your DNS.
+
+      Perfect for homelabs with dynamic IP addresses, keeping your services accessible via custom domains.
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/cloudflare.png"
+  thumbnail: ""
+  screenshot_link: []
+  title:
+    en_US: "Hotio Cloudflare DDNS"
+  tips: {}

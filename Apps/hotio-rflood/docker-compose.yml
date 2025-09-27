@@ -1,0 +1,156 @@
+name: hotio-rflood
+services:
+  rflood:
+    container_name: rflood
+    image: ghcr.io/hotio/rflood:release-0.16.0
+    command: sh -c "mkdir -p /data/Media/Downloads && chmod /data/Media/Downloads 777 && echo 'Downloads Folder created'"
+    ports:
+      - target: 3000
+        published: "3000"
+        protocol: tcp
+      - target: 5000
+        published: "5000"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - FLOOD_AUTH=false
+      - ARGS=
+      - FLOOD_ARGS=
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+        - container: UMASK
+          label:
+            en_US: "Umask"
+          description:
+            en_US: "The umask for the container."
+          default: "002"
+        - container: FLOOD_AUTH
+          label:
+            en_US: "Flood Auth"
+          description:
+            en_US: "Enable authentication for Flood."
+          default: "false"
+        - container: ARGS
+          label:
+            en_US: "rTorrent Args"
+          description:
+            en_US: "Additional arguments for rTorrent."
+          default: ""
+        - container: FLOOD_ARGS
+          label:
+            en_US: "Flood Args"
+          description:
+            en_US: "Additional arguments for Flood."
+          default: ""
+      ports:
+        - container: "3000"
+          description:
+            en_US: "The internal port for Flood web UI."
+        - container: "5000"
+          description:
+            en_US: "The internal port for rTorrent XMLRPC."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Flood configuration."
+        - container: /data/Media
+          description:
+            en_US: "The persistent directory for Media Library server configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: rflood
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Modern web UI for rTorrent"
+  description:
+    en_US: |
+      🌊 Flood is a modern, responsive web UI for rTorrent, built with Node.js and React.
+
+      It provides real-time torrent management, drag-and-drop uploads, and detailed statistics.
+
+      Designed for power users, Flood offers advanced features like RSS feeds and customizable themes for efficient torrent handling.
+
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+
+      ⚙️⚙️⚙️⚙️⚙️⚙️
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+      
+      **Please remove the container command to create the Downloads folder on startup, after you click install** 
+      **This is only required on the very first startup of the application after install
+      and will cause the container to keep crashing after startup.**
+      If your wondering why the container is crashing, this is why.
+      ⚙️⚙️⚙️⚙️⚙️⚙️
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/flood.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "3000"
+  scheme: http
+  title:
+    en_US: "Hotio rFlood"
+  tips:
+    before_install:
+      en_us: |
+        | Name | Value |
+        | ---- | ----- |
+        | Downloads Path To Set Inside Container | `/DATA/Media/Downloads` |
+
+        This pathing setup is consistent with Servarr best practice
+        when it comes to naming folders. 
+        this will allow hardlinking
+        and other features you want, while keeping the paths also
+        consistent with CasaOS.
+
+        Please make sure to set the paths correctly inside the container
+        after it is running, before beginning to use the app for production.
+
+        Permissions are setup correctly across folders for
+        hotio apps as per servarr 
+        
+        Just set the folder paths shown inside the containers.

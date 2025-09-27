@@ -1,0 +1,84 @@
+name: hotio-requestrr
+services:
+  requestrr:
+    container_name: requestrr
+    image: ghcr.io/hotio/requestrr:release-2.1.9
+    ports:
+      - target: 4545
+        published: "4545"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "4545"
+          description:
+            en_US: "The internal port for Chat bot for media requests."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Chat bot for media requests configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: requestrr
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Chat bot for media requests"
+  description:
+    en_US: |
+      🤖 Requestrr is a chatbot for media requests, integrating with Discord, Slack, and Telegram.
+
+      It allows users to request movies and TV shows from your library or add to your collection.
+
+      Connected to Overseerr or Ombi, Requestrr streamlines the process of requesting and approving media in your homelab.
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/requestrr.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "4545"
+  scheme: http
+  title:
+    en_US: "Hotio Requestrr"
+  tips: {}

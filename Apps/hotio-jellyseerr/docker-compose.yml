@@ -1,0 +1,89 @@
+name: hotio-jellyseerr
+services:
+  jellyseerr:
+    container_name: jellyseerr
+    image: ghcr.io/hotio/jellyseerr:release-2.7.3
+    ports:
+      - target: 5055
+        published: "5055"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "5055"
+          description:
+            en_US: "The internal port for Request management for Jellyfin."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Request management for Jellyfin configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: jellyseerr
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Request management for Jellyfin"
+  description:
+    en_US: |
+      🎬 Jellyseerr is a request management tool designed for Jellyfin media servers.
+
+      It allows users to request movies and TV shows directly from the Jellyfin interface, integrating with services like Radarr and Sonarr for automatic downloading.
+
+      With a user-friendly interface and support for multiple users, Jellyseerr enhances the media request experience in your home media setup.
+ 
+      ⚙️📺🎵 Official wiki for the Servarr suite of applications. 🎵📺⚙️
+      Find best practices and comprehensive configuration guides,
+      including essential Docker setup for your automated media center.
+      ➡️ 📺🎵[**Servarr**](https://wiki.servarr.com/)🎵📺
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jellyseerr.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "5055"
+  scheme: http
+  title:
+    en_US: "Hotio Jellyseerr"
+  tips: {}

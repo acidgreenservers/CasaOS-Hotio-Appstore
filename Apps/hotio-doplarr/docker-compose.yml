@@ -1,0 +1,84 @@
+name: hotio-doplarr
+services:
+  doplarr:
+    container_name: doplarr
+    image: ghcr.io/hotio/doplarr:release-3.6.3
+    ports:
+      - target: 80
+        published: "80"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "80"
+          description:
+            en_US: "The internal port for Request management system."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Request management system configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: doplarr
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Request management system"
+  description:
+    en_US: |
+      📋 Doplarr is a request management system that integrates with Discord and Plex to allow users to request movies and TV shows.
+
+      It connects to Radarr and Sonarr to automatically add approved requests to your media libraries.
+
+      Streamlines the process of managing media requests in a community or family setting.
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/doplarr.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "80"
+  scheme: http
+  title:
+    en_US: "Hotio Doplarr"
+  tips: {}

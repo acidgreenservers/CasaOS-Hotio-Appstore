@@ -1,0 +1,117 @@
+name: hotio-hotio-jellyfin
+services:
+  jellyfin:
+    container_name: hotio-jellyfin
+    image: ghcr.io/hotio/jellyfin:release-10.10.7
+    ports:
+      - target: 8096
+        published: "8096"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "8096"
+          description:
+            en_US: "The internal port for Media server."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Media server configuration."
+        - container: /data/Media
+          description:
+            en_US: "The persistent directory for Media Library server configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: jellyfin
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Media server"
+  description:
+    en_US: |
+      🎥 Jellyfin is a free and open-source media server software that allows you to organize, manage, and stream your personal media collection.
+
+      It supports a wide range of formats and devices, providing a beautiful interface for watching movies, TV shows, and listening to music. With features like live TV, DVR, and extensive plugin support, Jellyfin offers a flexible and customizable media experience.
+
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+
+      ⚙️📺🎵 Official wiki for the Servarr suite of applications. 🎵📺⚙️
+      Find best practices and comprehensive configuration guides,
+      including essential Docker setup for your automated media center.
+      ➡️ 📺🎵[**Servarr**](https://wiki.servarr.com/)🎵📺
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jellyfin.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "8096"
+  scheme: http
+  title:
+    en_US: "Hotio Jellyfin"
+  tips:
+    before_install:
+      en_us: |
+        | Name | Value |
+        | ---- | ----- |
+        | Movies Path To Set Inside Container | `/DATA/Media/Movies` |
+        | TV Shows Path To Set Inside Container | `/DATA/Media/TV Shows` |
+        | music Path To Set Inside Container | `/DATA/Media/Music` |
+
+        This pathing setup is consistent with Servarr best practice
+        when it comes to naming folders. 
+        this will allow hardlinking
+        and other features you want, while keeping the paths also
+        consistent with CasaOS.
+
+        Please make sure to set the paths correctly inside the container
+        after it is running, before beginning to use the app for production.
+
+        Permissions are setup correctly across folders for
+        hotio apps as per servarr 
+        
+        Just set the folder paths shown inside the containers.

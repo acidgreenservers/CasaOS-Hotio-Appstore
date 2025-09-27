@@ -1,0 +1,85 @@
+name: hotio-tautulli
+services:
+  tautulli:
+    container_name: tautulli
+    image: ghcr.io/hotio/tautulli:release-2.16.0
+    ports:
+      - target: 8181
+        published: "8181"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - WEBUI_PORTS=8181/tcp,8181/udp
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "8181"
+          description:
+            en_US: "The internal port for Plex monitoring and tracking."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Plex monitoring and tracking configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: tautulli
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Plex monitoring and tracking"
+  description:
+    en_US: |
+      📊 Tautulli is a monitoring and analytics tool for Plex Media Servers.
+
+      It provides detailed statistics on library usage, user activity, and streaming history, with customizable notifications and reports.
+
+      Track who is watching what, when, and on which devices to optimize your media server performance and content recommendations.
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tautulli.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "8181"
+  scheme: http
+  title:
+    en_US: "Hotio Tautulli"
+  tips: {}

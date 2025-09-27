@@ -1,0 +1,169 @@
+name: hotio-qbittorrent
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent:release-5.1.2
+    command: sh -c "mkdir -p /data/Media/Downloads && chmod /data/Media/Downloads 777 && echo 'Downloads Folder created'"
+    ports:
+      - target: 8080
+        published: "8080"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - WEBUI_PORTS=8080/tcp,8080/udp
+      - LIBTORRENT=v1
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+        - container: UMASK
+          label:
+            en_US: "Umask"
+          description:
+            en_US: "The umask for the container."
+          default: "002"
+        - container: WEBUI_PORTS
+          label:
+            en_US: "WebUI Ports"
+          description:
+            en_US: "Ports for the web UI."
+          default: "8080/tcp,8080/udp"
+        - container: LIBTORRENT
+          label:
+            en_US: "Libtorrent Version"
+          description:
+            en_US: "Version of libtorrent to use."
+          default: "v1"
+      ports:
+        - container: "8080"
+          description:
+            en_US: "The internal port for qBittorrent web UI."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for qBittorrent configuration."
+        - container: /data/Media
+          description:
+            en_US: "The persistent directory for Media Library server configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: qbittorrent
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Free and open-source BitTorrent client"
+  description:
+    en_US: |
+      🌐 qBittorrent is a free and open-source BitTorrent client that offers a clean and intuitive web UI.
+
+      It supports torrent creation, search, RSS feed parsing, and various plugins for enhanced functionality.
+
+      With built-in torrent search, encryption, and IP filtering, it's a robust choice for downloading torrents efficiently.
+
+      ⚙️⚙️⚙️⚙️⚙️⚙️
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+      
+      **Please remove the container command to create the Downloads folder on startup, after you click install** 
+      **This is only required on the very first startup of the application after install
+      and will cause the container to keep crashing after startup.**
+      If your wondering why the container is crashing, this is why.
+      ⚙️⚙️⚙️⚙️⚙️⚙️
+
+      ⚙️📺🎵 Official wiki for the Servarr suite of applications. 🎵📺⚙️
+      Find best practices and comprehensive configuration guides,
+      including essential Docker setup for your automated media center.
+      ➡️ 📺🎵[**Servarr**](https://wiki.servarr.com/)🎵📺
+
+      🔥 [**hotio.dev**](https://hotio.dev/)
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/qbittorrent.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "8080"
+  scheme: http
+  title:
+    en_US: "Hotio qBittorrent"
+  tips:
+    before_install:
+      en_us: |
+        Default Account
+        
+        | Username | Password |
+        |----------|----------|
+        | `admin`    | Get from log |
+
+        Passwords need to be viewed in the log
+
+        Default Accessible Path in qBittorrent
+        
+        | Name | Value |
+        | ---- | ----- |
+        | Download Path | `/DATA/Media/Downloads` |
+        | Download Path To Set Inside Container | `/data/Media/Downloads` |
+
+        *Please remove the container command to create the Downloads folder
+        on startup.
+        this is only required on the very first startup of the application after install
+        and will cause the container to keep crashing after startup.*
+
+        | Name | Value |
+        | ---- | ----- |
+        | Remove this container command in app settings | `sh` |
+        | Remove this container command in app settings | `-c` |
+        | Remove this container command in app settings | `mkdir -p /data/Media/Downloads && echo 'Downloads Folder created'` |
+
+        The pathing setup is consistent with Servarr best practice
+        when it comes to naming folders. 
+        This will allow hardlinking
+        and other features you want, while keeping the paths also
+        consistent with CasaOS.
+
+        Please make sure to set the paths correctly inside the container
+        after it is running, before beginning to use the app for production.
+
+        the folders required will get created by the apps when they need to
+        create them. 
+        Permissions are setup correctly across folders for
+        hotio apps as per servarr. 
+        
+        Just make sure set the folder paths shown inside the containers.

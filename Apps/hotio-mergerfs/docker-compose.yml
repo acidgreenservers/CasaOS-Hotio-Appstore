@@ -1,0 +1,71 @@
+name: hotio-mergerfs
+services:
+  mergerfs:
+    container_name: mergerfs
+    image: ghcr.io/hotio/mergerfs:release-2.40.2
+    init: true
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/branch1
+        target: /branch_1
+      - type: bind
+        source: /DATA/AppData/$AppID/branch2
+        target: /branch_2
+      - type: bind
+        source: /DATA/AppData/$AppID/mountpoint
+        target: /mountpoint
+        bind:
+          propagation: shared
+    restart: unless-stopped
+    x-casaos:
+      volumes:
+        - container: /branch_1
+          description:
+            en_US: "The first branch directory for MergerFS."
+        - container: /branch_2
+          description:
+            en_US: "The second branch directory for MergerFS."
+        - container: /mountpoint
+          description:
+            en_US: "The mountpoint directory for the merged filesystem."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: mergerfs
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Union filesystem for storage management"
+  description:
+    en_US: |
+      💾 MergerFS is a union filesystem that allows you to mount multiple directories into a single mount point.
+
+      It simplifies storage management by pooling together different drives or directories, providing features like path preservation, file attribute merging, and policy-based file placement.
+
+      Ideal for combining storage pools in home media servers or data management setups.
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://hotio.dev/webhook-avatars/pullio.png"
+  thumbnail: ""
+  screenshot_link: []
+  title:
+    en_US: "Hotio MergerFS"
+  tips: {}

@@ -1,0 +1,163 @@
+name: hotio-plex
+services:
+  plex:
+    container_name: plex
+    image: ghcr.io/hotio/plex:release-1.42.2
+    ports:
+      - target: 32400
+        published: "32400"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - PLEX_CLAIM_TOKEN=
+      - PLEX_ADVERTISE_URL=
+      - PLEX_NO_AUTH_NETWORKS=
+      - PLEX_BETA_INSTALL=false
+      - PLEX_PURGE_CODECS=false
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/AppData/$AppID/transcode
+        target: /transcode
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+        - container: UMASK
+          label:
+            en_US: "Umask"
+          description:
+            en_US: "The umask for the container."
+          default: "002"
+        - container: PLEX_CLAIM_TOKEN
+          label:
+            en_US: "Plex Claim Token"
+          description:
+            en_US: "Token for claiming the Plex server."
+          default: ""
+        - container: PLEX_ADVERTISE_URL
+          label:
+            en_US: "Plex Advertise URL"
+          description:
+            en_US: "URL to advertise the Plex server."
+          default: ""
+        - container: PLEX_NO_AUTH_NETWORKS
+          label:
+            en_US: "Plex No Auth Networks"
+          description:
+            en_US: "Networks that do not require authentication."
+          default: ""
+        - container: PLEX_BETA_INSTALL
+          label:
+            en_US: "Plex Beta Install"
+          description:
+            en_US: "Install Plex beta version."
+          default: "false"
+        - container: PLEX_PURGE_CODECS
+          label:
+            en_US: "Plex Purge Codecs"
+          description:
+            en_US: "Purge unused codecs."
+          default: "false"
+      ports:
+        - container: "32400"
+          description:
+            en_US: "The internal port for Plex media server."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Plex configuration."
+        - container: /transcode
+          description:
+            en_US: "The persistent directory for Plex transcoding."
+        - container: /data/Media
+          description:
+            en_US: "The persistent directory for Media Library server configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: plex
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Organize and stream your media"
+  description:
+    en_US: |
+      🎬 Plex is a powerful media server that organizes and streams your personal video, music, and photo collections.
+
+      With a beautiful interface accessible from any device, it supports live TV, DVR, and extensive metadata fetching to create a cinematic experience.
+
+      Share your media library with friends and family, or enjoy private streaming with robust security features.
+
+      ⚙️📺🎵 Official wiki for the Servarr suite of applications. 🎵📺⚙️
+      Find best practices and comprehensive configuration guides,
+      including essential Docker setup for your automated media center.
+      ➡️ 📺🎵[**Servarr**](https://wiki.servarr.com/)🎵📺
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/plex.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "32400"
+  scheme: http
+  title:
+    en_US: "Hotio Plex"
+  tips:
+    before_install:
+      en_us: |
+        | Name | Value |
+        | ---- | ----- |
+        | Movies Path To Set Inside Container | `/DATA/Media/Movies` |
+        | TV Shows Path To Set Inside Container | `/DATA/Media/TV Shows` |
+        | Music Path To Set Inside Container | `/DATA/Media/Music` |
+
+        This pathing setup is consistent with Servarr best practice
+        when it comes to naming folders. 
+        this will allow hardlinking
+        and other features you want, while keeping the paths also
+        consistent with CasaOS.
+
+        Please make sure to set the paths correctly inside the container
+        after it is running, before beginning to use the app for production.
+
+        Permissions are setup correctly across folders for
+        hotio apps as per servarr 
+        
+        Just set the folder paths shown inside the containers.

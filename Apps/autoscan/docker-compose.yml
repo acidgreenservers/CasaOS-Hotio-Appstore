@@ -1,0 +1,98 @@
+name: hotio-autoscan
+services:
+  autoscan:
+    container_name: autoscan
+    image: ghcr.io/hotio/autoscan:release
+    ports:
+      - target: 3030
+        published: "3030"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+        - container: UMASK
+          label:
+            en_US: "Umask"
+          description:
+            en_US: "The umask for the container."
+          default: "002"
+      ports:
+        - container: "3030"
+          description:
+            en_US: "The internal port for Autoscan web UI."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Autoscan configuration."
+        - container: /data
+          description:
+            en_US: "The persistent directory for Autoscan data."
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: autoscan
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Automatically scan your media libraries."
+  description:
+    en_US: |
+      🔄 Autoscan automatically triggers library scans in Plex, Emby, or Jellyfin when media files are added or removed.
+
+      It monitors file system changes and integrates with download clients to ensure your media libraries are always up to date.
+
+      With support for multiple media servers, Autoscan eliminates the need for manual rescans, keeping your collections current.
+
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: https://hotio.dev/webhook-avatars/pullio.png
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "3030"
+  scheme: http
+  title:
+    en_US: "Hotio Autoscan"
+  tips: {}

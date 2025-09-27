@@ -1,0 +1,111 @@
+name: hotio-stash
+services:
+  stash:
+    container_name: stash
+    image: ghcr.io/hotio/stash:release
+    ports:
+      - target: 9999
+        published: "9999"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "9999"
+          description:
+            en_US: "The internal port for Personal video organizer."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Personal video organizer configuration."
+        - container: /data/Media
+          description:
+            en_US: "The persistent directory for Media Library server configuration."
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: stash
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Personal video organizer"
+  description:
+    en_US: |
+      🎬 Stash is a personal video organizer and media management tool for adult content.
+
+      It scans, tags, and organizes your video library with advanced metadata and scene recognition.
+
+      Featuring a web interface for browsing and playing videos, Stash provides a comprehensive solution for managing personal media collections.
+
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/stash.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "9999"
+  scheme: http
+  title:
+    en_US: "Hotio Stash"
+  tips:
+    before_install:
+      en_us: |
+        | Name | Value |
+        | ---- | ----- |
+        | Adult Path To Set Inside Container | `/DATA/Media/Adult` |
+
+        This pathing setup is consistent with Servarr best practice
+        when it comes to naming folders. 
+        this will allow hardlinking
+        and other features you want, while keeping the paths also
+        consistent with CasaOS.
+
+        Please make sure to set the paths correctly inside the container
+        after it is running, before beginning to use the app for production.
+
+        Permissions are setup correctly across folders for
+        hotio apps as per servarr 
+        
+        Just set the folder paths shown inside the containers.

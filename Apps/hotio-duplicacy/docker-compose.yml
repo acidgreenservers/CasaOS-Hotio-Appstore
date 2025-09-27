@@ -1,0 +1,109 @@
+name: hotio-duplicacy
+services:
+  duplicacy:
+    container_name: duplicacy
+    hostname: duplicacy
+    image: ghcr.io/hotio/duplicacy:release-1.8.0
+    ports:
+      - target: 3875
+        published: "3875"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/AppData/$AppID/cache
+        target: /cache
+      - type: bind
+        source: /DATA/AppData/$AppID/logs
+        target: /logs
+      - type: bind
+        source: /DATA/AppData/$AppID/data
+        target: /data
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+        - container: UMASK
+          label:
+            en_US: "Umask"
+          description:
+            en_US: "The umask for the container."
+          default: "002"
+      ports:
+        - container: "3875"
+          description:
+            en_US: "The internal port for Duplicacy web UI."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Duplicacy configuration."
+        - container: /cache
+          description:
+            en_US: "The persistent directory for Duplicacy cache."
+        - container: /logs
+          description:
+            en_US: "The persistent directory for Duplicacy logs."
+        - container: /data
+          description:
+            en_US: "The persistent directory for Duplicacy data."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: duplicacy
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Cross-platform cloud backup tool"
+  description:
+    en_US: |
+      💾 Duplicacy is a cross-platform cloud backup tool that supports incremental backups to various storage backends.
+
+      It uses lock-free deduplication and encryption, ensuring efficient and secure data storage.
+
+      Ideal for homelab users looking for reliable, encrypted backups to cloud services like S3, Google Drive, or Dropbox.
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/duplicacy.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "3875"
+  scheme: http
+  title:
+    en_US: "Hotio Duplicacy"
+  tips: {}

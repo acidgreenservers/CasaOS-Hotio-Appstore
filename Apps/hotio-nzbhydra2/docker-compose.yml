@@ -1,0 +1,89 @@
+name: hotio-nzbhydra2
+services:
+  nzbhydra2:
+    container_name: nzbhydra2
+    image: ghcr.io/hotio/nzbhydra2:release-7.19.2
+    ports:
+      - target: 5076
+        published: "5076"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "5076"
+          description:
+            en_US: "The internal port for Meta search for NZB indexers."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for Meta search for NZB indexers configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: nzbhydra2
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "Meta search for NZB indexers"
+  description:
+    en_US: |
+      🔍 NZBHydra2 is a meta search tool for NZB indexers.
+
+      It allows searching multiple NZB indexers from a single interface, aggregating results and providing a unified API for applications like Sonarr and Radarr.
+
+      With duplicate detection and statistics, it streamlines the NZB acquisition process.
+
+      ⚙️📺🎵 Official wiki for the Servarr suite of applications. 🎵📺⚙️
+      Find best practices and comprehensive configuration guides,
+      including essential Docker setup for your automated media center.
+      ➡️ 📺🎵[**Servarr**](https://wiki.servarr.com/)🎵📺
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nzbhydra2.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "5076"
+  scheme: http
+  title:
+    en_US: "Hotio nzbhydra2"
+  tips: {}

@@ -1,0 +1,100 @@
+name: hotio-sabnzbd
+services:
+  sabnzbd:
+    container_name: sabnzbd
+    image: ghcr.io/hotio/sabnzbd:release
+    ports:
+      - target: 8080
+        published: "8080"
+        protocol: tcp
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - WEBUI_PORTS=8080/tcp,8080/udp
+      - ARGS
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/config
+        target: /config
+      - type: bind
+        source: /DATA/Media
+        target: /data/Media
+    restart: unless-stopped
+    x-casaos:
+      envs:
+        - container: PUID
+          label:
+            en_US: "User ID"
+          description:
+            en_US: "The user ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: PGID
+          label:
+            en_US: "Group ID"
+          description:
+            en_US: "The group ID for the container (recommended: 1000)."
+          default: "1000"
+        - container: TZ
+          label:
+            en_US: "Timezone"
+          description:
+            en_US: "Set the timezone for the container."
+          default: "America/Los_Angeles"
+      ports:
+        - container: "8080"
+          description:
+            en_US: "The internal port for NZB download client."
+      volumes:
+        - container: /config
+          description:
+            en_US: "The persistent directory for NZB download client configuration."
+        - container: /data/Media
+          description:
+            en_US: "The persistent directory for Media Library server configuration."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: sabnzbd
+  category: Hotio
+  developer: Hotio
+  author: Homelab-Appstore
+  tagline:
+    en_US: "NZB download client"
+  description:
+    en_US: |
+      📰 SABnzbd is a powerful NZB download client that automates the downloading and post-processing of Usenet files.
+
+      It supports multiple servers, categories, and scripts for unpacking and renaming.
+
+      With a web interface and API, SABnzbd integrates seamlessly with media management tools like Sonarr and Radarr.
+
+      **Please use the provided pathing in the before install popup, or when clicking tips on the app in the app list.**
+      These containers are setup for consistensy with the servarr [**folder**](https://wiki.servarr.com/en/docker-guide#consistent-and-well-planned-paths) setup
+
+      ⚙️📺🎵 Official wiki for the Servarr suite of applications. 🎵📺⚙️
+      Find best practices and comprehensive configuration guides,
+      including essential Docker setup for your automated media center.
+      ➡️ 📺🎵[**Servarr**](https://wiki.servarr.com/)🎵📺
+
+      ➡️ 🔥 [**hotio.dev**](https://hotio.dev/) 🔥
+
+      ➡️ [**GitHub Repo**](https://github.com/acidgreenservers/CasaOS-Hotio-Appstore)
+
+      If you want to create more folders in the Media folder, you may have to run "chmod folder-name 755" on the host machine as root
+      in order to give the folder proper permissions for these apps
+
+      **Click The Tips Button On The App Icon in The Apps List For More Info if You Custom Installed**
+
+  icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/sabnzbd.png"
+  thumbnail: ""
+  screenshot_link: []
+  port_map: "8080"
+  scheme: http
+  title:
+    en_US: "Hotio Sabnzbd"
+  tips: {}

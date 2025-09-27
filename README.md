@@ -1,6 +1,14 @@
-# CasaOS AppStore
+# CasaOS Hotio AppStore
 
-[![GitHub issues by-label](https://img.shields.io/github/issues/IceWhaleTech/CasaOS-AppStore/help%20wanted?label=help%20wanted&style=for-the-badge)](https://github.com/IceWhaleTech/CasaOS-AppStore/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) [![GitHub contributors](https://img.shields.io/github/contributors/IceWhaleTech/CasaOS-AppStore?style=for-the-badge)](https://github.com/IceWhaleTech/CasaOS-AppStore/graphs/contributors)
+An Appstore containing Hotio Containers from [**Hotio.dev**](https://hotio.dev/)
+
+these are all tested and working...as far as i know.
+they have as many icons as i could find for them...
+some just didnt have any...
+
+here is a screenshot of the vpn variables for every container.
+
+![VPN Variables Screenshot](vpn_variables_screenshot.png)
 
 CasaOS AppStore needs your help to grow:
 
