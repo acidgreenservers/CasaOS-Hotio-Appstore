@@ -12,7 +12,7 @@ here is a screenshot of the vpn variables for every container.
 
 CasaOS AppStore needs your help to grow:
 
-- See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute CasaOS Apps in Docker Compose format.
+- See [CONTRIBUTING.md]([CONTRIBUTING.md](https://github.com/IceWhaleTech/CasaOS-AppStore/blob/main/CONTRIBUTING.md)) for how to contribute CasaOS Apps in Docker Compose format.
 
   **IMPORTANT**: Your PR must be *well tested* on your own CasaOS first. This is the mandatory first step for your submission.
 
